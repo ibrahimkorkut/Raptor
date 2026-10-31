@@ -1,0 +1,11 @@
+[package]
+name = "hyperdownload-connection-manager"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+hyperdownload-shared.workspace = true
+tokio.workspace = true
+reqwest.workspace = true
+tracing.workspace = true

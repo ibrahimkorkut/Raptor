@@ -1,0 +1,76 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/shared",
+    "crates/http-client",
+    "crates/segment-manager",
+    "crates/connection-manager",
+    "crates/storage",
+    "crates/download-engine",
+    "crates/queue-manager",
+    "crates/scheduler",
+    "crates/browser-bridge",
+    "crates/clipboard-monitor",
+    "desktop/src-tauri",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["HyperDownload Contributors"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/hyperdownload/hyperdownload"
+
+[workspace.dependencies]
+# Internal Workspace Crates
+hyperdownload-shared = { path = "crates/shared" }
+hyperdownload-http-client = { path = "crates/http-client" }
+hyperdownload-segment-manager = { path = "crates/segment-manager" }
+hyperdownload-connection-manager = { path = "crates/connection-manager" }
+hyperdownload-storage = { path = "crates/storage" }
+hyperdownload-download-engine = { path = "crates/download-engine" }
+hyperdownload-queue-manager = { path = "crates/queue-manager" }
+hyperdownload-scheduler = { path = "crates/scheduler" }
+hyperdownload-browser-bridge = { path = "crates/browser-bridge" }
+hyperdownload-clipboard-monitor = { path = "crates/clipboard-monitor" }
+
+# Async Runtime & Networking
+tokio = { version = "1.43", features = ["full"] }
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "stream", "cookies", "socks", "json"] }
+hyper = { version = "1.5", features = ["full"] }
+axum = { version = "0.8", features = ["ws"] }
+tower-http = { version = "0.6", features = ["cors", "trace", "fs"] }
+bytes = "1.10"
+futures-util = "0.3"
+async-trait = "0.1"
+
+# Windows Platform APIs
+windows = { version = "0.58", features = [
+    "Win32_Foundation",
+    "Win32_Storage_FileSystem",
+    "Win32_System_Pipes",
+    "Win32_System_Shutdown",
+    "Win32_System_DataExchange",
+    "Win32_UI_WindowsAndMessaging",
+    "Win32_UI_Shell",
+    "Win32_Security"
+] }
+
+# Storage & Persistence
+rusqlite = { version = "0.33", features = ["bundled"] }
+memmap2 = "0.9"
+
+# Concurrency, Math & Errors
+dashmap = "6.2"
+tokio-util = "0.7"
+governor = "0.8"
+thiserror = "2.0"
+anyhow = "1.0"
+uuid = { version = "1.13", features = ["v4", "serde"] }
+
+# Serialization & CLI
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+clap = { version = "4.5", features = ["derive"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }

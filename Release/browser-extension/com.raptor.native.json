@@ -1,0 +1,11 @@
+{
+    "path":  "C:\\Users\\ibrahim\\Desktop\\faster_download_manager\\Raptor\\target\\release\\raptor-host.exe",
+    "description":  "Raptor High-Performance Native Messaging Host",
+    "name":  "com.raptor.native",
+    "allowed_origins":  [
+                            "chrome-extension://knldjmfmopnpolahpmmgbagdohdnhkik/",
+                            "chrome-extension://*"
+                        ],
+    "type":  "stdio"
+}
+

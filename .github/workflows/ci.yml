@@ -1,0 +1,115 @@
+name: Raptor CI & Automated Testing (Playwright + TestSprite)
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
+jobs:
+  # -------------------------------------------------------------
+  # Job 1: Rust Core Engine Unit & Integration Tests
+  # -------------------------------------------------------------
+  rust-tests:
+    name: 🦀 Rust Engine & Workspace Tests
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      - name: Cargo Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            Raptor/target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Run Cargo Tests
+        working-directory: ./Raptor
+        run: cargo test --workspace --verbose
+
+  # -------------------------------------------------------------
+  # Job 2: Playwright Deterministic E2E UI & API Tests
+  # -------------------------------------------------------------
+  playwright-e2e:
+    name: 🎭 Playwright E2E UI Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: Raptor/desktop/package.json
+
+      - name: Install Desktop Dependencies
+        working-directory: ./Raptor/desktop
+        run: npm install
+
+      - name: Install Playwright Browsers
+        working-directory: ./Raptor/desktop
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Playwright E2E Test Suite
+        working-directory: ./Raptor/desktop
+        run: npm run test:e2e
+
+      - name: Upload Playwright Test Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: Raptor/desktop/playwright-report/
+          retention-days: 14
+
+  # -------------------------------------------------------------
+  # Job 3: TestSprite AI Autonomous Product Layer QA
+  # -------------------------------------------------------------
+  testsprite-qa:
+    name: 🤖 TestSprite AI Autonomous QA
+    needs: [playwright-e2e]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run TestSprite Action
+        uses: TestSprite/testsprite-action@v1
+        with:
+          api-key: ${{ secrets.TESTSPRITE_API_KEY }}
+          project: "raptor-download-manager"
+          config: "testsprite.config.json"
+        continue-on-error: true
+
+      - name: Upload TestSprite Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: testsprite-results
+          path: testsprite-results/
+          retention-days: 14

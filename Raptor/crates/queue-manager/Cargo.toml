@@ -1,0 +1,11 @@
+[package]
+name = "hyperdownload-queue-manager"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+hyperdownload-shared.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+serde.workspace = true

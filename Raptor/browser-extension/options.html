@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Raptor Uzantı Ayarları</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    body {
+      background: #090d16;
+      color: #f1f5f9;
+      padding: 32px;
+      display: flex;
+      justify-content: center;
+    }
+    .container {
+      max-width: 680px;
+      width: 100%;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #1e293b;
+    }
+    .logo {
+      width: 36px;
+      height: 36px;
+      background: #16a34a;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: bold;
+      box-shadow: 0 2px 10px rgba(22, 163, 74, 0.4);
+    }
+    .title-group h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .title-group p {
+      font-size: 13px;
+      color: #94a3b8;
+    }
+    .card {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin-bottom: 6px;
+    }
+    .card-subtitle {
+      font-size: 12px;
+      color: #64748b;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      color: #cbd5e1;
+      margin-bottom: 6px;
+    }
+    textarea, input[type="text"], input[type="number"] {
+      width: 100%;
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #f8fafc;
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+    textarea:focus, input[type="text"]:focus, input[type="number"]:focus {
+      border-color: #16a34a;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+      font-family: monospace;
+      line-height: 1.5;
+    }
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+    .checkbox-row input {
+      accent-color: #16a34a;
+      width: 16px;
+      height: 16px;
+    }
+    .btn-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 24px;
+    }
+    .btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s ease;
+    }
+    .btn-primary {
+      background: #16a34a;
+      color: white;
+    }
+    .btn-primary:hover {
+      background: #15803d;
+    }
+    .btn-secondary {
+      background: #1e293b;
+      color: #94a3b8;
+      border: 1px solid #334155;
+    }
+    .btn-secondary:hover {
+      background: #334155;
+      color: #f1f5f9;
+    }
+    .toast {
+      display: none;
+      padding: 10px 16px;
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #34d399;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="icons/icon-48.png" style="width:36px; height:36px; border-radius:8px;" alt="Raptor" />
+      <div class="title-group">
+        <h1>Raptor Entegrasyon Ayarları</h1>
+        <p>Otomatik indirme yakalama kuralları ve yerel köprü iletişimi</p>
+      </div>
+    </div>
+
+    <div id="save-toast" class="toast">
+      ✓ Ayarlar başarıyla kaydedildi!
+    </div>
+
+    <div class="card">
+      <div class="card-title">Dosya Türleri Yakalama</div>
+      <div class="card-subtitle">
+        Bu uzantılarla biten indirmeler Raptor tarafından otomatik olarak yakalanacaktır. Uzantıları virgül veya boşluk ile ayırın.
+      </div>
+      <div class="form-group">
+        <label for="file-extensions">Yakalanacak Dosya Uzantıları</label>
+        <textarea id="file-extensions" rows="4"></textarea>
+      </div>
+      <button id="reset-extensions-btn" class="btn btn-secondary" style="font-size: 11px; padding: 6px 12px;">Varsayılanlara Sıfırla</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Hariç Tutulan Alan Adları</div>
+      <div class="card-subtitle">
+        Raptor bu alan adlarından başlatılan indirmeleri asla yakalamaz (her satıra bir alan adı).
+      </div>
+      <div class="form-group">
+        <label for="excluded-domains">Hariç Tutulan Siteler</label>
+        <textarea id="excluded-domains" rows="3" placeholder="ornek.com&#10;banka.com"></textarea>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">İletişim Köprüsü & Port</div>
+      <div class="card-subtitle">
+        Uzantının masaüstü Raptor motoruna nasıl bağlanacağını yapılandırın.
+      </div>
+      <div class="form-group">
+        <label for="bridge-port">Yerel REST Portu</label>
+        <input type="number" id="bridge-port" min="1024" max="65535" value="9145" style="max-width: 140px;">
+      </div>
+      <div class="form-group">
+        <label class="checkbox-row">
+          <input type="checkbox" id="use-native-messaging" checked>
+          <span>Yüksek Hızlı Chrome / Edge Native Messaging Kullan</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <span style="font-size: 12px; color: #64748b;">Raptor v1.1.0 • İbrahim Korkut</span>
+      <button id="save-btn" class="btn btn-primary">Ayarları Kaydet</button>
+    </div>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>

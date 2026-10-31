@@ -1,0 +1,26 @@
+[package]
+name = "hyperdownload-download-engine"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+hyperdownload-shared.workspace = true
+hyperdownload-http-client.workspace = true
+hyperdownload-segment-manager.workspace = true
+hyperdownload-connection-manager.workspace = true
+hyperdownload-storage.workspace = true
+tokio.workspace = true
+tokio-util.workspace = true
+dashmap.workspace = true
+reqwest.workspace = true
+futures-util.workspace = true
+tracing.workspace = true
+bytes.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+uuid.workspace = true
+clap = { workspace = true }
+
+[dev-dependencies]
+axum.workspace = true

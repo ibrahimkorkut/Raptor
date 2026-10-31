@@ -1,0 +1,41 @@
+{
+  "$schema": "https://raw.githubusercontent.com/TestSprite/testsprite-action/main/schema.json",
+  "project": {
+    "name": "raptor-download-manager",
+    "type": "web-application",
+    "version": "1.1.0"
+  },
+  "environment": {
+    "baseUrl": "http://localhost:1420",
+    "healthCheckUrl": "http://127.0.0.1:9145/health"
+  },
+  "aiExploration": {
+    "enabled": true,
+    "strategy": "goal-oriented",
+    "goals": [
+      {
+        "name": "IDM Modal Interception Validation",
+        "description": "Verify that downloading an executable file does NOT display format/quality selector, while streaming media URLs display format choices",
+        "paths": ["/"]
+      },
+      {
+        "name": "Batch Delete & Selection Flow",
+        "description": "Select multiple download items and trigger bulk removal without crash",
+        "paths": ["/"]
+      },
+      {
+        "name": "Category Filter Verification",
+        "description": "Switch between All files, Archives, Video, Documents, and verify filtered views",
+        "paths": ["/"]
+      }
+    ],
+    "maxDepth": 5,
+    "maxSessionMinutes": 10
+  },
+  "reporting": {
+    "format": ["junit", "html", "json"],
+    "outputDir": "./testsprite-results",
+    "failOnCritical": true,
+    "failOnSecurityVulnerabilities": true
+  }
+}

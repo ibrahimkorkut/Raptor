@@ -1,0 +1,23 @@
+[package]
+name = "hyperdownload-browser-bridge"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+hyperdownload-shared.workspace = true
+hyperdownload-download-engine.workspace = true
+hyperdownload-storage.workspace = true
+tokio.workspace = true
+reqwest = { workspace = true }
+axum.workspace = true
+tower-http = { workspace = true, features = ["fs", "cors"] }
+serde = { workspace = true, features = ["derive"] }
+serde_json.workspace = true
+tracing.workspace = true
+uuid = { workspace = true }
+
+[target.'cfg(windows)'.dependencies]
+windows.workspace = true
+
+
